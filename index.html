@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>The Wedding of XXX &amp; XXX</title>
-<meta property="og:title" content="The Wedding of XXX &amp; XXX">
+<title>The Wedding</title>
+<meta property="og:title" content="The Wedding">
 <meta property="og:image" content="assets/duo.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,13 +28,13 @@ a.lnk{color:inherit;text-decoration:underline;text-underline-offset:4px;text-dec
 #cover.open{transform:translateY(-100%)}
 #cover img{width:min(70vw,300px);filter:drop-shadow(0 12px 24px #0006);animation:bob 4s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(-8px) rotate(1deg)}}
-#cover h1{font-size:2.4rem;margin:18px 0 6px}
+#cover h1{text-transform:uppercase;font-size:2.4rem;margin:18px 0 6px}
 #guest{font-weight:700;font-size:1.2rem;margin:6px 0 22px}
 /* hero pair */
 .pair{display:flex;justify-content:center;align-items:flex-end;gap:0;margin:28px 0}
 .pair img{width:44%;filter:drop-shadow(0 8px 14px #0005)}
 .pair img:first-child{transform:rotate(-4deg)}.pair img:last-child{transform:rotate(4deg) translateY(-14px)}
-.names{font-size:clamp(2.4rem,11vw,3.6rem)}
+.names{text-transform:uppercase;font-size:clamp(2.4rem,11vw,3.6rem)}
 .amp{font-family:Gloock;color:var(--rose);font-size:2rem;display:block}
 /* couple */
 .person{margin:36px 0}
@@ -93,7 +93,7 @@ footer img{width:min(80%,360px)}
   <section class="dark" style="padding-top:56px"><div class="in">
     <p>We are getting married</p>
     <div class="pair"><img src="assets/bride.webp" alt="Bride" width="200"><img src="assets/groom.webp" alt="Groom" width="200"></div>
-    <h1 class="names"><span data-c="bride"></span><span class="amp">&amp;</span><span data-c="groom"></span></h1>
+    <h1 class="names"><span data-c="groomShort"></span><span class="amp">&amp;</span><span data-c="brideShort"></span></h1>
     <p style="margin-top:18px" data-c="dateLabel"></p>
   </div></section>
 
@@ -150,19 +150,21 @@ footer img{width:min(80%,360px)}
 <script>
 /* ===== EDIT HERE ONLY ===== */
 const CONFIG = {
-  groom: "XXX", bride: "XXX",
-  groomFather: "XXX", groomMother: "XXX",
-  brideFather: "XXX", brideMother: "XXX",
-  venue: "XXX",                                  // venue address (also used for Google Maps)
-  weddingISO: "2026-12-12T10:00:00+08:00",       // date & time (+08:00 = WITA). Replace when known
-  durationHours: 4,
-  dateLabel: "XXX",                              // text shown to guests, e.g. "Saturday, 12 December 2026 · 10:00 WITA"
-  bank: "XXX", giftAddress: "XXX",
-  scriptURL: "https://script.google.com/macros/s/AKfycbyj3zg0E6WsqSfuqmg2yQM8Q1ksxZcCyXcxS8UPoNQ8fgFfo6utzPrBMhm-R40aEeHNmA/exec"
+  groom: "Moch. Reza", bride: "Khonsa Azzahrah",
+  groomShort: "Reza", brideShort: "Khonsa",       // short names for cover & opening page
+  groomFather: "Samsul Arifin", groomMother: "Ida Sita Ilusi",
+  brideFather: "Mulawi", brideMother: "Siti Sinarwati",
+  venue: "QH8H+9QP, Curah Mluwo, Rowotamtu, Kec. Rambipuji, Kabupaten Jember, Jawa Timur 68152",
+  weddingISO: "2026-12-05T16:00:00+07:00",       // +07:00 = WIB
+  durationHours: 5,                              // 16:00 - 21:00
+  dateLabel: "Saturday, 05 December 2026 · 16:00 WIB",
+  bank: "BCA 024-156-3404 a.n. Khonsa Azzahrah",
+  giftAddress: "QH8H+9QP, Curah Mluwo, Rowotamtu, Kec. Rambipuji, Kabupaten Jember, Jawa Timur 68152",
+  scriptURL: "https://script.google.com/macros/s/AKfycbzPO4szf68QbZ8Lz0d7xqh2Dc4U4HtvieuAw0rf1rTiNUCuwzS7jDdhXBzkFVeTrGJN1A/exec"
 };
 /* =========================== */
 const $=id=>document.getElementById(id);
-CONFIG.groom_bride=CONFIG.groom+" & "+CONFIG.bride;
+CONFIG.groom_bride=CONFIG.groomShort+" & "+CONFIG.brideShort;
 document.querySelectorAll("[data-c]").forEach(e=>e.textContent=CONFIG[e.dataset.c]);
 document.title="The Wedding of "+CONFIG.groom_bride;
 const g=new URLSearchParams(location.search).get("to"); if(g)$("guest").textContent=g, $("name").value=g;
@@ -217,7 +219,7 @@ $("f").onsubmit=async e=>{e.preventDefault();
  b.disabled=false};
 
 // Copy bank number
-$("copyBtn").onclick=async()=>{try{await navigator.clipboard.writeText(CONFIG.bank);$("copyBtn").textContent="Copied"}catch(e){$("copyBtn").textContent="Copy failed"}setTimeout(()=>$("copyBtn").textContent="Copy number",1800)};
+$("copyBtn").onclick=async()=>{try{await navigator.clipboard.writeText(CONFIG.bank.replace(/\D/g,""));$("copyBtn").textContent="Copied"}catch(e){$("copyBtn").textContent="Copy failed"}setTimeout(()=>$("copyBtn").textContent="Copy number",1800)};
 </script>
 </body>
 </html>
