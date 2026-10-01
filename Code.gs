@@ -1,42 +1,245 @@
-// Google Apps Script — paste into Extensions > Apps Script inside your Google Sheet.
-// Sheet tab name: "RSVP"  |  Row 1 headers: Timestamp | Name | Attendance | Guests | Message
-const SHEET = "RSVP";
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wedding Reception</title>
+<meta property="og:title" content="Wedding Reception">
+<meta property="og:image" content="assets/duo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+:root{--wine:#6e1832;--wine2:#4a0f22;--rose:#f3c4d0;--pink:#d1658a;--blush:#fde9ee;--ink:#2a1219;--paper:#fff6e3}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:"Patrick Hand",system-ui,sans-serif;font-size:1.12rem;color:var(--ink);background:var(--paper);line-height:1.6;overflow-x:hidden}
+h1,h2,h3{font-family:Caveat,cursive;font-weight:700;line-height:1}
+section{padding:72px 24px;max-width:560px;margin:auto;text-align:center}
+.dark{background:var(--wine);color:var(--blush);max-width:none}
+.dark>.in{max-width:560px;margin:auto}
+h2{font-size:2.9rem;margin-bottom:2px}.sq{display:block;width:min(300px,80%);height:42px;color:var(--wine);margin:0 auto 14px}.dark .sq{color:var(--rose)}
+p.sub{opacity:.75;margin-bottom:24px}
+.btn{display:inline-block;border:0;cursor:pointer;background:var(--wine);color:#fff;padding:14px 28px;border-radius:99px;font:1.2rem "Patrick Hand";text-decoration:none}
+.dark .btn{background:var(--rose);color:var(--wine2)}
+a.lnk{color:inherit;text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--rose)}
+/* cover */
+@keyframes bob{50%{transform:translateY(-8px) rotate(1deg)}}
+#cover{position:fixed;inset:0;z-index:50;background:radial-gradient(circle at 50% 25%,#fffaf0,var(--paper));color:var(--wine);overflow:auto;display:flex;text-align:center;transition:transform .9s cubic-bezier(.7,0,.2,1)}
+#cover.open{transform:translateY(-100%)}
+.cv{width:100%;max-width:420px;margin:auto;padding:24px 20px 44px;display:flex;flex-direction:column;align-items:center}
+#cover h1{font-size:clamp(3.6rem,18vw,5rem)}
+.q{max-width:250px;margin:4px 0 0;opacity:.85;transform:rotate(-3deg);line-height:1.2}
+.stage{position:relative;width:min(80%,300px);margin-top:14px}
+.stage img{width:100%;display:block;filter:drop-shadow(0 8px 12px #6e183240);animation:bob 4s ease-in-out infinite}
+.say{position:absolute;left:-12%;top:-8%;font:700 2rem Caveat;transform:rotate(-8deg)}
+.pod{position:relative;z-index:1;margin-top:-30px;width:100%;height:190px;border-radius:50%;background:var(--wine);box-shadow:0 20px 0 var(--wine2);color:var(--blush);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pod p{font:700 2.2rem Caveat;line-height:1}.pod small{font-size:1rem;margin:2px 0 8px;opacity:.9}
+#cover .btn{background:#fff;color:var(--wine);border:3px solid var(--wine2);padding:9px 26px}
+/* hero pair */
+.pair{display:flex;justify-content:center;align-items:flex-end;gap:0;margin:28px 0}
+.pair img{width:44%;filter:drop-shadow(0 8px 14px #0005)}
+.pair img:first-child{transform:rotate(-4deg)}.pair img:last-child{transform:rotate(4deg) translateY(-14px)}
+.names{font-size:clamp(3.6rem,18vw,5.4rem)}
+.amp{font-family:Caveat;color:var(--rose);font-size:2.6rem;display:block}
+/* couple */
+.person{margin:0;display:flex;flex-direction:column}.person.l{align-items:flex-start;text-align:left;padding-left:6%}.person.r{align-items:flex-end;text-align:right;padding-right:6%}.thread{display:block;width:78%;height:100px;margin:-6px auto;color:var(--wine)}.h{position:absolute;color:#c2185b;font-style:normal;font-size:1.4rem;animation:bob 3s ease-in-out infinite}.pair{position:relative}
+.ill{display:block;width:110px;height:84px;margin:10px auto 6px;color:var(--wine);animation:bob 3.2s ease-in-out infinite}.dark .ill{color:var(--blush)}
+.gifts{display:flex;justify-content:center;align-items:flex-end;gap:6px;color:var(--blush);margin-bottom:6px}.gifts svg{width:68px;height:68px;animation:hop 2s ease-in-out infinite}.gifts svg:nth-child(2){width:88px;height:88px;animation-delay:.3s}.gifts svg:nth-child(3){animation-delay:.6s}
+@keyframes hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px)}}
+form>div:not(.seg)>label{color:#fff}
+.seg label{border:2px solid var(--pink)!important;background:#d1658a66!important;color:#fff!important;font-weight:400!important;font-size:1.15rem}
+.seg label:has(input:checked){background:var(--pink)!important;border-color:#fff!important}
+.person img{width:150px;filter:drop-shadow(0 6px 10px #0003)}
+.person h3{font-size:2.5rem;margin-top:10px}
+.person p{opacity:.8}
+/* countdown */
+#cd{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:8px}
+#cd div{background:#ffffff14;border:1px solid #ffffff30;border-radius:18px;padding:16px 4px}
+#cd b{display:block;font:700 2.5rem Caveat}
+#cd span{font-size:.8rem;opacity:.8}
+/* event */
+.date{display:block;text-decoration:none;color:var(--wine);border:2px dashed var(--wine);border-radius:22px;padding:22px;margin:16px 0}
+.date big{display:block;font:700 2.1rem Caveat}
+.date small{font-weight:700}
+.venue{font-size:1.1rem;display:block;margin:12px 0 24px}
+iframe{width:100%;height:280px;border:0;border-radius:22px}
+/* form */
+form{display:grid;gap:14px;text-align:left}
+label{font-weight:700;font-size:.95rem}
+input,select,textarea{width:100%;padding:14px;border:1.5px solid #d9b7c0;border-radius:14px;font:inherit;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus,.btn:focus-visible,a:focus-visible{outline:3px solid var(--rose);outline-offset:2px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg label{border:1.5px solid #d9b7c0;border-radius:14px;padding:12px;text-align:center;cursor:pointer;font-weight:500}
+.seg input{display:none}.seg label:has(input:checked){background:var(--wine);color:#fff;border-color:var(--wine)}
+#msg{min-height:1.4em;font-weight:700;text-align:center;margin-top:10px}
+/* wishes */
+#wishes{display:grid;gap:12px;margin-top:24px;max-height:520px;overflow:auto;text-align:left}
+.w{background:#fff;border:1px solid #f0d3da;border-radius:18px;padding:16px}
+.w b{color:var(--wine)}.w small{opacity:.55;margin-left:6px}
+.w p{margin-top:4px;font-style:italic}
+/* gift */
+.gift{border:1px solid #ffffff40;border-radius:22px;padding:22px;margin:14px 0;text-align:left}
+.gift small{opacity:.7}.gift strong{display:block;font-size:1.3rem;margin:2px 0 10px;word-break:break-word}
+.gift .btn{padding:8px 18px;font-size:.9rem}
+footer{padding:64px 24px calc(64px + env(safe-area-inset-bottom));text-align:center;background:var(--wine2);color:var(--blush)}
+footer img{width:min(80%,360px)}
+/* music */
+#music{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:40;width:48px;height:48px;border-radius:50%;border:0;background:var(--wine);color:#fff;font-size:1.2rem;box-shadow:0 6px 16px #0004;cursor:pointer;display:none}
+#music.on{animation:spin 6s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.rv{opacity:0;transform:translateY(18px);transition:.8s}.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
 
-function sh_() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  let s = ss.getSheetByName(SHEET) || ss.insertSheet(SHEET);
-  if (s.getLastRow() === 0) s.appendRow(["Timestamp", "Name", "Attendance", "Guests", "Message"]);
-  return s;
-}
+<svg width="0" height="0" style="position:absolute"><symbol id="sq" viewBox="0 0 300 50"><g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M8 22C60 6 100 34 138 30"/><path d="M162 30C200 34 240 6 292 22"/></g><path d="M150 42C137 32 133 23 140 18C145 14 150 18 150 21C150 18 155 14 160 18C167 23 163 32 150 42Z" fill="#c2185b"/></symbol><symbol id="th" viewBox="0 0 300 100"><path d="M40 2C40 70 260 20 260 98" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M150 62C137 52 133 43 140 38C145 34 150 38 150 41C150 38 155 34 160 38C167 43 163 52 150 62Z" fill="#c2185b"/></symbol><symbol id="rings" viewBox="0 0 120 80"><g fill="none" stroke="currentColor" stroke-width="4"><circle cx="44" cy="46" r="24"/><circle cx="76" cy="46" r="24"/></g><path d="M76 8l9 9-9 11-9-11z" fill="#f3c4d0" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></symbol>
+<symbol id="glass" viewBox="0 0 120 100"><g fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(-14 38 50)"><path d="M28 14h20l-2 26a8 8 0 0 1-16 0z" fill="#f3c4d0"/><path d="M38 48v30M28 80h20"/></g><g transform="rotate(14 82 50)"><path d="M72 14h20l-2 26a8 8 0 0 1-16 0z" fill="#f3c4d0"/><path d="M82 48v30M72 80h20"/></g></g><circle cx="60" cy="16" r="3" fill="#c2185b"/><circle cx="50" cy="6" r="2" fill="#c2185b"/><circle cx="70" cy="6" r="2" fill="#c2185b"/></symbol>
+<symbol id="house" viewBox="0 0 120 100"><g fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"><path d="M26 44v44h68V44" fill="#fffaf0"/><path d="M14 50L60 12l46 38"/><rect x="50" y="62" width="20" height="26" fill="#f3c4d0"/><rect x="32" y="54" width="13" height="13"/><rect x="75" y="54" width="13" height="13"/></g><path d="M60 42c-6-5-8-9-4-12 3-2 4 0 4 2 0-2 1-4 4-2 4 3 2 7-4 12z" fill="#c2185b"/></symbol>
+<symbol id="gift" viewBox="0 0 100 100"><g stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"><rect x="14" y="42" width="72" height="46" rx="4" fill="#d1658a"/><rect x="10" y="28" width="80" height="16" rx="4" fill="#f3c4d0"/><path d="M50 28v60" fill="none"/><path d="M50 28C38 8 20 14 28 25c4 5 14 3 22 3zM50 28C62 8 80 14 72 25c-4 5-14 3-22 3z" fill="#c2185b"/></g></symbol></svg>
+<div id="cover"><div class="cv">
+  <p style="font-size:1.3rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px">Wedding Reception</p>
+  <h1 data-c="groom_bride"></h1>
+  <svg class="sq" viewBox="0 0 300 50"><use href="#sq"/></svg>
+  <p class="q">“Kira-kira siapa ya yang akan jadi teman hidupku nanti saat dewasa?”</p>
+  <div class="stage"><span class="say">“Aku dong!”</span><img src="assets/duo.webp" alt="Groom and bride" width="300"><i class="h" style="right:-8%;top:20%">♥</i><i class="h" style="right:-12%;top:42%;font-size:1rem">♥</i><i class="h" style="left:-10%;top:48%;font-size:1.1rem">♥</i></div>
+  <div class="pod"><p>You're invited</p><small>Dear <b id="guest">Guest</b></small><button class="btn" id="openBtn">Open invitation</button></div>
+</div></div>
 
-// Receives RSVP from the website; adds one row per submission
-function doPost(e) {
-  const lock = LockService.getScriptLock();
-  lock.waitLock(10000);
-  try {
-    const d = JSON.parse(e.postData.contents);
-    const clean = v => String(v || "").replace(/^[=+\-@]/, "'$&").slice(0, 400); // block formula injection
-    sh_().appendRow([new Date(), clean(d.name), clean(d.attendance), Number(d.guests) || 1, clean(d.message)]);
-    return json_({ ok: true });
-  } catch (err) {
-    return json_({ ok: false, error: String(err) });
-  } finally {
-    lock.releaseLock();
-  }
-}
+<main>
+  <section class="dark" style="padding-top:56px"><div class="in">
+    <p>Wedding Reception</p>
+    <div class="pair"><img src="assets/groom.webp" alt="Groom" width="200"><img src="assets/bride.webp" alt="Bride" width="200"><i class="h" style="left:6%;top:4%">♥</i><i class="h" style="right:8%;top:0">♥</i></div>
+    <h1 class="names"><span data-c="groomShort"></span><span class="amp">&amp;</span><span data-c="brideShort"></span></h1>
+    <p style="margin-top:18px" data-c="dateLabel"></p><svg class="ill" viewBox="0 0 120 80"><use href="#rings"/></svg>
+  </div></section>
 
-// Returns wishes (name + message), newest first, for the website
-function doGet() {
-  const rows = sh_().getDataRange().getValues().slice(1);
-  const tz = Session.getScriptTimeZone();
-  const out = rows.filter(r => r[1] && r[4]).reverse().slice(0, 100).map(r => ({
-    name: r[1],
-    message: r[4],
-    date: Utilities.formatDate(new Date(r[0]), tz, "d MMM yyyy")
-  }));
-  return json_(out);
-}
+  <section class="rv" id="couple">
+    <h2>Bride &amp; Groom</h2>
+    <p class="sub">With gratitude to God, we warmly invite you to our wedding reception.</p>
+    <div class="person l"><img src="assets/groom.webp" alt="Groom" width="150"><h3 data-c="groom"></h3><p>Son of<br><b data-c="groomFather"></b> &amp; <b data-c="groomMother"></b></p></div>
+    <svg class="thread" viewBox="0 0 300 100"><use href="#th"/></svg>
+    <div class="person r"><img src="assets/bride.webp" alt="Bride" width="150"><h3 data-c="bride"></h3><p>Daughter of<br><b data-c="brideFather"></b> &amp; <b data-c="brideMother"></b></p></div>
+  </section>
 
-function json_(o) {
-  return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
+  <section class="dark rv"><div class="in">
+    <h2>Counting down</h2>
+    <div id="cd"><div><b id="d">0</b><span>Days</span></div><div><b id="h">0</b><span>Hours</span></div><div><b id="m">0</b><span>Minutes</span></div><div><b id="s">0</b><span>Seconds</span></div></div>
+  </div></section>
+
+  <section class="rv" id="event">
+    <svg class="ill" viewBox="0 0 120 100"><use href="#glass"/></svg><h2>Save the date</h2>
+    <a class="date" id="calLink" target="_blank" rel="noopener"><em style="font-style:normal;display:block;opacity:.8">Wedding Reception</em><big data-c="dateLabel"></big><small>Tap to add to Google Calendar</small></a>
+    <svg class="ill" viewBox="0 0 120 100"><use href="#house"/></svg><p class="sub">Venue</p>
+    <a class="venue lnk" id="mapLink" target="_blank" rel="noopener" data-c="venueLabel"></a>
+    <iframe id="mapFrame" loading="lazy" title="Venue map"></iframe>
+  </section>
+
+  <section class="dark rv" id="rsvp"><div class="in">
+    <h2>RSVP</h2>
+    <form id="f" style="color:var(--ink)">
+      <div><label for="name">Full name</label><input id="name" name="name" required autocomplete="name"></div>
+      <div class="seg"><label><input type="radio" name="attendance" value="Attending" checked>Attending</label><label><input type="radio" name="attendance" value="Not Attending">Not attending</label></div>
+      <div><label for="guests" style="color:var(--blush)">Number of guests</label><select id="guests" name="guests"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+      <div><label for="message" style="color:var(--blush)">Wishes &amp; messages</label><textarea id="message" name="message" rows="4" maxlength="400"></textarea></div>
+      <button class="btn" type="submit" id="send">Send RSVP</button>
+    </form>
+    <div id="msg" role="status"></div>
+  </div></section>
+
+  <section class="rv" id="wall">
+    <h2>Wedding wishes</h2>
+    <div id="wishes"><p class="sub">Loading wishes…</p></div>
+  </section>
+
+  <section class="dark rv"><div class="in">
+    <div class="gifts"><svg viewBox="0 0 100 100"><use href="#gift"/></svg><svg viewBox="0 0 100 100"><use href="#gift"/></svg><svg viewBox="0 0 100 100"><use href="#gift"/></svg></div><h2>Wanna give us some gifts?</h2>
+    <p class="sub">Your presence and prayers are already more than enough for us. If you'd like to share a little something, we'd be truly grateful.</p>
+    <div class="gift"><small>Bank account</small><strong data-c="bank"></strong><button class="btn" id="copyBtn">Copy number</button></div>
+    <div class="gift"><small>Gift delivery address</small><strong data-c="giftAddress"></strong></div>
+  </div></section>
+</main>
+
+<footer><img src="assets/duo.webp" alt="" width="360" loading="lazy"><h2 style="margin-top:20px">Thank you</h2><p class="sub">We can't wait to celebrate with you.<br><b data-c="groom_bride"></b></p></footer>
+
+<button id="music" aria-label="Toggle music">♪</button>
+<audio id="bgm" src="assets/music.mp3" loop preload="none"></audio>
+
+<script>
+/* ===== EDIT HERE ONLY ===== */
+const CONFIG = {
+  groom: "Moch. Reza", bride: "Khonsa Azzahrah",
+  groomShort: "Reza", brideShort: "Khonsa",       // short names for cover & opening page
+  groomFather: "Samsul Arifin", groomMother: "Ida Sita Ilusi",
+  brideFather: "Mulawi", brideMother: "Siti Sinarwati",
+  venue: "QH8H+9QP, Curah Mluwo, Rowotamtu, Kec. Rambipuji, Kabupaten Jember, Jawa Timur 68152",
+  venueLabel: "Rumah Mempelai Pria, Curah Mluwo, Rowotamtu, Kec. Rambipuji, Kabupaten Jember, Jawa Timur 68152",   // text shown to guests (map still uses "venue" above)
+  weddingISO: "2026-12-05T16:00:00+07:00",       // +07:00 = WIB
+  durationHours: 5,                              // 16:00 - 21:00
+  dateLabel: "Saturday, 05 December 2026 · 16:00 – 21:00 WIB",
+  bank: "BCA 024-156-3404 a.n. Khonsa Azzahrah",
+  giftAddress: "Rumah Mempelai Pria, Curah Mluwo, Rowotamtu, Kec. Rambipuji, Kabupaten Jember, Jawa Timur 68152",
+  scriptURL: "https://script.google.com/macros/s/AKfycbzPO4szf68QbZ8Lz0d7xqh2Dc4U4HtvieuAw0rf1rTiNUCuwzS7jDdhXBzkFVeTrGJN1A/exec"
+};
+/* =========================== */
+const $=id=>document.getElementById(id);
+CONFIG.groom_bride=CONFIG.groomShort+" & "+CONFIG.brideShort;
+document.querySelectorAll("[data-c]").forEach(e=>e.textContent=CONFIG[e.dataset.c]);
+document.title="Wedding Reception of "+CONFIG.groom_bride;
+const g=new URLSearchParams(location.search).get("to"); if(g)$("guest").textContent=g, $("name").value=g;
+
+document.querySelectorAll("section h2").forEach(h=>h.insertAdjacentHTML("afterend",'<svg class="sq" viewBox="0 0 300 50"><use href="#sq"/></svg>'));
+// Maps
+const q=encodeURIComponent(CONFIG.venue);
+$("mapLink").href="https://www.google.com/maps/search/?api=1&query="+q;
+$("mapFrame").src="https://maps.google.com/maps?q="+q+"&output=embed";
+
+// Calendar
+const t0=new Date(CONFIG.weddingISO), t1=new Date(+t0+CONFIG.durationHours*36e5);
+const fmt=d=>d.toISOString().replace(/[-:]|\.\d{3}/g,"");
+$("calLink").href="https://calendar.google.com/calendar/render?action=TEMPLATE"
+ +"&text="+encodeURIComponent("Wedding Reception of "+CONFIG.groom_bride)
+ +"&dates="+fmt(t0)+"/"+fmt(t1)
+ +"&location="+q
+ +"&details="+encodeURIComponent("Join us at the wedding reception of "+CONFIG.groom_bride+". We can't wait to see you!");
+
+// Countdown
+function tick(){let s=Math.max(0,Math.floor((t0-Date.now())/1000));
+ $("d").textContent=Math.floor(s/86400);$("h").textContent=Math.floor(s%86400/3600);
+ $("m").textContent=Math.floor(s%3600/60);$("s").textContent=s%60}
+tick();setInterval(tick,1000);
+
+// Cover + music
+const bgm=$("bgm"),mb=$("music");
+function setMusic(on){on?bgm.play().catch(()=>{}):bgm.pause();mb.classList.toggle("on",on)}
+$("openBtn").onclick=()=>{$("cover").classList.add("open");document.body.style.overflow="";mb.style.display="block";setMusic(true)};
+document.body.style.overflow="hidden";
+mb.onclick=()=>setMusic(bgm.paused);
+
+// Reveal on scroll
+const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add("in")),{threshold:.12});
+document.querySelectorAll(".rv").forEach(e=>io.observe(e));
+
+// Wishes
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+async function loadWishes(){
+ try{const r=await fetch(CONFIG.scriptURL);const a=await r.json();
+  $("wishes").innerHTML=a.length?a.map(w=>`<div class="w"><b>${esc(w.name)}</b><small>${esc(w.date||"")}</small><p>“${esc(w.message)}”</p></div>`).join(""):'<p class="sub">Be the first to send a wish.</p>';
+ }catch(e){$("wishes").innerHTML='<p class="sub">Wishes will appear here once the Google Sheet is connected.</p>'}
 }
+loadWishes();setInterval(loadWishes,30000);
+
+// RSVP
+$("f").onsubmit=async e=>{e.preventDefault();
+ const b=$("send"),m=$("msg");b.disabled=true;m.textContent="Sending…";
+ const d=Object.fromEntries(new FormData(e.target));
+ try{await fetch(CONFIG.scriptURL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(d)});
+  m.textContent="Thank you! Your RSVP has been sent.";e.target.reset();if(g)$("name").value=g;setTimeout(loadWishes,2500);
+ }catch(err){m.textContent="Could not send. Check your connection and try again."}
+ b.disabled=false};
+
+// Copy bank number
+$("copyBtn").onclick=async()=>{try{await navigator.clipboard.writeText(CONFIG.bank.replace(/\D/g,""));$("copyBtn").textContent="Copied"}catch(e){$("copyBtn").textContent="Copy failed"}setTimeout(()=>$("copyBtn").textContent="Copy number",1800)};
+</script>
+</body>
+</html>
