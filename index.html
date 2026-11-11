@@ -117,6 +117,28 @@ footer::before{margin:-64px -24px 44px}
 input,select,textarea{border-color:var(--rose);font-family:inherit}
 .w{background:#fbf3de;border-color:var(--rose)}
 .seal{width:84px;height:84px;border-radius:50%;margin:0 auto 18px;background:radial-gradient(circle at 35% 30%,#a8323a,#5c0f18);color:#f3d9b0;display:flex;align-items:center;justify-content:center;font:2rem "Great Vibes";box-shadow:0 6px 14px #0006,inset 0 0 0 4px #7d1a24}
+
+/* ===== ASET GAMBAR (opsional, otomatis aktif bila file ada di assets/) ===== */
+section,#cover .cv{position:relative}
+.dc{position:absolute;pointer-events:none;z-index:1;max-width:none}
+.jl,.jr{top:-6px;width:min(34vw,150px)}.jl{left:-4px}.jr{right:-4px;transform:scaleX(-1)}
+.bl,.br{bottom:-10px;width:min(52vw,230px)}.bl{left:-14px}.br{right:-14px;transform:scaleX(-1)}
+.tl{top:-26px;left:-22px;width:min(40vw,170px)}.tr{top:-26px;right:-22px;width:min(40vw,170px);transform:scaleX(-1)}
+.cbl{bottom:-24px;left:-22px;width:min(42vw,180px)}.cbr{bottom:-24px;right:-22px;width:min(42vw,180px);transform:scaleX(-1)}
+.oval{position:relative}.oval .ph{position:relative;z-index:0}
+.oval .fr{position:absolute;inset:-13%;width:126%;height:126%;max-width:none;object-fit:contain;border-radius:0;z-index:2;pointer-events:none}
+.tirai{display:block;width:calc(100% + 48px);max-width:none;margin:-72px -24px 28px;height:150px;object-fit:cover;-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
+.card{background:url(assets/frame-krem.svg) center/100% 100% no-repeat,#fbf3de}
+.dark::before,footer::before{background:url(assets/renda.svg) center/auto 100% repeat-x,radial-gradient(circle at 50% 0,var(--paper) 9px,transparent 10px) 0 0/20px 20px repeat-x}
+.seal{background:url(assets/segel.svg) center/cover no-repeat,radial-gradient(circle at 35% 30%,#a8323a,#5c0f18);color:#f3d9b0cc;font-size:1.3rem}
+#ayat .card,#couple .card{position:relative;z-index:2}
+
+/* ===== SVG TAMBAHAN ===== */
+.dark{background:url(assets/pola.svg) center/120px,var(--wine)}
+#cover{background:linear-gradient(#22110a99,#22110acc),url(assets/pola.svg) center/120px,#22110a}
+.card{border:0;outline:0;border-radius:0;box-shadow:none;background:url(assets/frame-krem.svg) center/100% 100% no-repeat;padding:54px 40px;filter:drop-shadow(0 8px 14px #3a211630)}
+.ml,.mr{top:-6px;width:26px}.ml{left:8px}.mr{right:8px}
+.gl,.gr{top:6px;width:64px}.gl{left:6px}.gr{right:6px;transform:scaleX(-1)}
 </style>
 </head>
 <body>
@@ -125,17 +147,17 @@ input,select,textarea{border-color:var(--rose);font-family:inherit}
 <symbol id="glass" viewBox="0 0 120 100"><g fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(-14 38 50)"><path d="M28 14h20l-2 26a8 8 0 0 1-16 0z" fill="#f3c4d0"/><path d="M38 48v30M28 80h20"/></g><g transform="rotate(14 82 50)"><path d="M72 14h20l-2 26a8 8 0 0 1-16 0z" fill="#f3c4d0"/><path d="M82 48v30M72 80h20"/></g></g><circle cx="60" cy="16" r="3" fill="#c2185b"/><circle cx="50" cy="6" r="2" fill="#c2185b"/><circle cx="70" cy="6" r="2" fill="#c2185b"/></symbol>
 <symbol id="house" viewBox="0 0 120 100"><g fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"><path d="M26 44v44h68V44" fill="#fffaf0"/><path d="M14 50L60 12l46 38"/><rect x="50" y="62" width="20" height="26" fill="#f3c4d0"/><rect x="32" y="54" width="13" height="13"/><rect x="75" y="54" width="13" height="13"/></g><path d="M60 42c-6-5-8-9-4-12 3-2 4 0 4 2 0-2 1-4 4-2 4 3 2 7-4 12z" fill="#c2185b"/></symbol>
 <symbol id="gift" viewBox="0 0 100 100"><g stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"><rect x="14" y="42" width="72" height="46" rx="4" fill="#d1658a"/><rect x="10" y="28" width="80" height="16" rx="4" fill="#f3c4d0"/><path d="M50 28v60" fill="none"/><path d="M50 28C38 8 20 14 28 25c4 5 14 3 22 3zM50 28C62 8 80 14 72 25c-4 5-14 3-22 3z" fill="#c2185b"/></g></symbol></svg>
-<div id="cover"><div class="cv">
+<div id="cover"><div class="cv"><img class="dc jl" src="assets/janur.svg" alt="" onerror="this.remove()"><img class="dc jr" src="assets/janur.svg" alt="" onerror="this.remove()"><img class="dc bl" src="assets/bunga.svg" alt="" onerror="this.remove()"><img class="dc br" src="assets/bunga.svg" alt="" onerror="this.remove()">
   <p class="kic">The Wedding of</p>
   <h1 data-c="groom_bride"></h1>
   <p class="dt" data-c="dateLabel"></p>
-  <div class="oval"><img src="assets/duo.webp" alt="Mempelai" width="300"></div>
+  <div class="oval"><img class="ph" src="assets/cover.jpg" alt="Mempelai" width="300" onerror="this.onerror=null;this.src='assets/duo.webp'"><img class="fr" src="assets/frame-oval.svg" alt="" onload="this.parentNode.style.border=0;this.parentNode.style.boxShadow='none'" onerror="this.remove()"></div>
   <p class="to">Kepada Yth.<br><b id="guest">Bapak/Ibu/Saudara/i</b></p>
   <button class="btn" id="openBtn">Buka Undangan</button>
 </div></div>
 
 <main>
-  <section class="rv" id="ayat"><div class="card">
+  <section class="rv" id="ayat"><img class="dc tl" src="assets/bunga.svg" alt="" onerror="this.remove()"><img class="dc cbr" src="assets/bunga.svg" alt="" onerror="this.remove()"><div class="card">
     <p class="ar" lang="ar" dir="rtl">وَمِنْ اٰيٰتِهٖٓ اَنْ خَلَقَ لَكُمْ مِّنْ اَنْفُسِكُمْ اَزْوَاجًا لِّتَسْكُنُوْٓا اِلَيْهَا وَجَعَلَ بَيْنَكُمْ مَّوَدَّةً وَّرَحْمَةً ۗ اِنَّ فِيْ ذٰلِكَ لَاٰيٰتٍ لِّقَوْمٍ يَّتَفَكَّرُوْنَ ۝٢١</p>
     <p>Di antara tanda-tanda (kebesaran)-Nya ialah bahwa Dia menciptakan pasangan-pasangan untukmu dari (jenis) dirimu sendiri agar kamu merasa tenteram kepadanya. Dia menjadikan di antaramu rasa cinta dan kasih sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir.</p>
     <small>QS. Ar-Rum: 21</small>
@@ -146,14 +168,14 @@ input,select,textarea{border-color:var(--rose);font-family:inherit}
     <div id="cd"><div><b id="d">0</b><span>Hari</span></div><div><b id="h">0</b><span>Jam</span></div><div><b id="m">0</b><span>Menit</span></div><div><b id="s">0</b><span>Detik</span></div></div>
   </div></section>
 
-  <section class="rv" id="couple"><div class="card">
+  <section class="rv" id="couple"><img class="dc tr" src="assets/bunga.svg" alt="" onerror="this.remove()"><img class="dc cbl" src="assets/bunga.svg" alt="" onerror="this.remove()"><div class="card">
     <p>Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di hari bahagia kami.</p>
     <h3 data-c="groom"></h3><p>Putra dari Bapak <b data-c="groomFather"></b> &amp; Ibu <b data-c="groomMother"></b></p>
     <span class="amp">&amp;</span>
     <h3 data-c="bride"></h3><p>Putri dari Bapak <b data-c="brideFather"></b> &amp; Ibu <b data-c="brideMother"></b></p>
   </div></section>
 
-  <section class="dark rv" id="event"><div class="in">
+  <section class="dark rv" id="event"><img class="dc ml" src="assets/mutiara.svg" alt="" onerror="this.remove()"><img class="dc mr" src="assets/mutiara.svg" alt="" onerror="this.remove()"><div class="in"><img class="tirai" src="assets/tirai.svg" alt="" onerror="this.remove()">
     <h2>Acara</h2>
     <div class="ev">
       <div><h3>Akad</h3><p data-c="dateLabel"></p><p>Pukul <b data-c="akad"></b></p></div>
@@ -165,7 +187,7 @@ input,select,textarea{border-color:var(--rose);font-family:inherit}
     <a class="lnk" id="calLink" target="_blank" rel="noopener">Tambah ke Kalender</a>
   </div></section>
 
-  <section class="rv" id="gift">
+  <section class="rv" id="gift"><img class="dc gl" src="assets/wayang.svg" alt="" onerror="this.remove()"><img class="dc gr" src="assets/wayang.svg" alt="" onerror="this.remove()">
     <h2>Wedding Gift</h2>
     <p class="sub">Kehadiran dan doa Anda merupakan hadiah terindah bagi kami. Namun, apabila Anda ingin memberikan tanda kasih, kami menerimanya dengan tulus dan penuh rasa syukur.</p>
     <div id="gifts"></div>
